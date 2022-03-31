@@ -1,8 +1,9 @@
 from django.http import HttpResponse
+from .models import Review
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .serializer import ReviewSerializer
+from .serializer import ReviewCreateSerializer
 from hotelapp.models import Hotel
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 # Create your views here.
@@ -74,7 +75,7 @@ def create_review(request):
             else:
                 return Response({"message":"No Hotel data found"},status=status.HTTP_404_NOT_FOUND)
             rating_ = sentiment_analysis(data["review"])
-            serializer = ReviewSerializer(data=data)
+            serializer = ReviewCreateSerializer(data=data)
             if serializer.is_valid():
                 serializer.save(hotel=hotel_obj,rating=rating_)
                 return Response(serializer.data,status=status.HTTP_201_CREATED)
@@ -83,4 +84,21 @@ def create_review(request):
     except Exception as e:
         return Response({"message":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        
+@api_view(['GET'])
+def retrieve_hotel_reviews(request):
+    try:
+        if request.method=="GET":
+            if "hotel_id" in request.GET:
+                # 1st method
+                # hotel_objs=Hotel.objects.filter(id=2)
+                # if hotel_objs.count():
+                #     hotel_obj = hotel_objs[0]
+                #     review_objs = Review.objects.filter(hotel=hotel_obj)
+                # 2nd method
+                review_objs = Review.objects.filter(hotel__id=request.GET["hotel_id"])
+                serializer = ReviewCreateSerializer(review_objs,many=True)
+                return Response(serializer.data,status=status.HTTP_200_OK)
+            else:
+                return Response({"message":"Parameter hotel_id is required"},status=status.HTTP_400_BAD_REQUEST)        
+    except Exception as e:
+        return Response({"message":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)

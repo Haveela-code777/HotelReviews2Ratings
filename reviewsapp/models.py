@@ -12,3 +12,7 @@ class Review(models.Model):
 
     def __str__(self):
         return self.hotel.name+" 's review"
+
+# select * from Review where hotel.id= 2
+
+# select * from Review where hotel = (select * from Hotel where id =2)

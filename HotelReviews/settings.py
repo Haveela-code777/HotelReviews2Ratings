@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-vht(y*34i^s=1!s5cps20sf5^*yw+@f(t0v3ge$9uhsoh9r^si
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+###
 
 
 # Application definition

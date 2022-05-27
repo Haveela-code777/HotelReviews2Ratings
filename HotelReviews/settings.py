@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-vht(y*34i^s=1!s5cps20sf5^*yw+@f(t0v3ge$9uhsoh9r^si
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://review2ratings.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['*']
 ###
 
 
